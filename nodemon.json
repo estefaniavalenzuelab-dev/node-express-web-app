@@ -1,0 +1,12 @@
+{
+  "watch": [
+    "src",
+    "views",
+    "public"
+  ],
+  "ext": "js,json,hbs,css",
+  "ignore": [
+    "src/data/*.json",
+    "logs/*.txt"
+  ]
+}

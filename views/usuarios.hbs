@@ -1,0 +1,57 @@
+{{> header}}
+    <main class="contenedor">
+      <h1>{{titulo}}</h1>
+
+      <p>Total encontrado: {{totalUsuarios}}</p>
+
+      <form method="GET" action="/usuarios">
+        <div>
+          <label for="nombre">Nombre</label>
+          <input
+            id="nombre"
+            name="nombre"
+            type="search"
+            value="{{filtros.nombre}}"
+          >
+        </div>
+
+        <div>
+          <label for="activo">Estado</label>
+            <select id="activo" name="activo">
+            <option value="">Todos</option>
+
+            <option
+                value="true"
+                {{#if (esIgual filtros.activo "true")}}
+                selected
+                {{/if}}
+            >
+                Activos
+            </option>
+
+            <option
+                value="false"
+                {{#if (esIgual filtros.activo "false")}}
+                selected
+                {{/if}}
+            >
+                Inactivos
+            </option>
+            </select>
+        </div>
+
+        <button type="submit">Filtrar</button>
+        <a href="/usuarios">Limpiar</a>
+      </form>
+
+      {{#if hayUsuarios}}
+        <section class="grid-usuarios">
+            {{#each usuarios}}
+             {{> tarjetaUsuario}}
+            {{/each}}
+        </section>
+      {{else}}
+        <p>No se encontraron usuarios para los filtros indicados.</p>
+      {{/if}}
+    </main>
+{{> footer}}

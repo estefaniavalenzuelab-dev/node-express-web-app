@@ -1,0 +1,17 @@
+<article class="usuario">
+  <p class="numero">Usuario {{sumarUno @index}}</p>
+
+  <h2>{{nombre}}</h2>
+
+  <p>{{correo}}</p>
+
+  {{#if activo}}
+    <span class="estado estado-activo">Activo</span>
+  {{else}}
+    <span class="estado estado-inactivo">Inactivo</span>
+  {{/if}}
+
+  <p>
+    <a href="/usuarios/{{id}}">Ver detalle</a>
+  </p>
+</article>

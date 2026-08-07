@@ -1,0 +1,30 @@
+{{> header}}
+
+<main class="contenedor">
+  <p>
+    <a href="/usuarios">← Volver a usuarios</a>
+  </p>
+
+  <article class="detalle-usuario">
+    <h1>{{usuario.nombre}}</h1>
+
+    <dl>
+      <div>
+        <dt>ID</dt>
+        <dd>{{usuario.id}}</dd>
+      </div>
+
+      <div>
+        <dt>Correo</dt>
+        <dd>{{usuario.correo}}</dd>
+      </div>
+
+      <div>
+        <dt>Estado</dt>
+        <dd>{{formatearEstado usuario.activo}}</dd>
+      </div>
+    </dl>
+  </article>
+</main>
+
+{{> footer}}

@@ -1,0 +1,1 @@
+console.log("Archivo JavaScript estático cargado.");

@@ -1,0 +1,21 @@
+{{> header}}
+
+<main class="contenedor">
+  <section class="error">
+    <p class="codigo-error">{{statusCode}}</p>
+
+    <h1>{{titulo}}</h1>
+
+    <p>{{mensaje}}</p>
+
+    {{#if detalles}}
+      <pre>{{detalles}}</pre>
+    {{/if}}
+
+    <p>
+      <a href="/">Volver al inicio</a>
+    </p>
+  </section>
+</main>
+
+{{> footer}}
