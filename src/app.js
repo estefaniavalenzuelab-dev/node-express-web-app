@@ -2,21 +2,23 @@ import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
 import hbs from "hbs";
+import { pool, probarConexion } from "./config/database.js";
+import { validarVariablesEntorno } from "./config/env.js";
+
+validarVariablesEntorno(); 
 import { registrarHelpersHandlebars } from "./config/handlebars.js";
 import { agregarContextoPeticion } from "./middlewares/agregarContextoPeticion.js";
 import { agregarDatosVista } from "./middlewares/agregarDatosVista.js";
 import { manejarErrores } from "./middlewares/manejarErrores.js";
+import {
+  registrarAcceso
+} from "./middlewares/registrarAcceso.js";
 import { rutaNoEncontrada } from "./middlewares/rutaNoEncontrada.js";
 import indexRouter from "./routes/index.routes.js";
 import usuariosRouter from "./routes/usuarios.routes.js";
 import webRouter from "./routes/web.routes.js";
 import { obtenerMensajeInicio } from "./utils/mensajes.js";
-import {
-  RUTA_PARTIALS,
-  RUTA_PUBLIC,
-  RUTA_VIEWS
-} from "./utils/rutas.js";
-
+import { RUTA_PARTIALS, RUTA_PUBLIC, RUTA_VIEWS } from "./utils/rutas.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,15 +37,13 @@ app.use(agregarContextoPeticion);
 app.use(registrarAcceso);
 app.use(agregarDatosVista);
 
-import {
-  registrarAcceso
-} from "./middlewares/registrarAcceso.js";
+import { registrarAcceso } from "./middlewares/registrarAcceso.js";
 
 app.use(express.json());
 app.use(
   express.urlencoded({
-    extended: true
-  })
+    extended: true,
+  }),
 );
 app.use(express.static(RUTA_PUBLIC));
 
@@ -54,46 +54,69 @@ app.use("/api/usuarios", usuariosRouter);
 app.use(rutaNoEncontrada);
 app.use(manejarErrores);
 
-app.listen(PORT, () => {
-  console.log(obtenerMensajeInicio(PORT));
-});
+try {
+  await probarConexion();
+} catch (error) {
+  console.error("La aplicación no puede iniciar sin base de datos.");
+
+  console.error(error.message);
+
+  process.exitCode = 1;
+  throw error;
+}
+
 
 const servidor = app.listen(PORT, () => {
   console.log(obtenerMensajeInicio(PORT));
 });
 
-function cerrarServidor(senal) {
-  console.log(
-    `\nSe recibió ${senal}. Cerrando servidor...`
-  );
+let cerrando = false;
 
-  servidor.close((error) => {
+async function cerrarAplicacion(senal) {
+  if (cerrando) {
+    return;
+  }
+
+  cerrando = true;
+
+  console.log(`\nSe recibió ${senal}. Cerrando aplicación...`);
+
+  servidor.close(async (error) => {
+    try {
+      await pool.end();
+      console.log("Pool PostgreSQL cerrado.");
+    } catch (dbError) {
+      console.error("Error al cerrar PostgreSQL:", dbError.message);
+
+      process.exitCode = 1;
+    }
+
     if (error) {
-      console.error(
-        "No fue posible cerrar el servidor:",
-        error
-      );
+      console.error("Error al cerrar Express:", error.message);
 
       process.exitCode = 1;
       return;
     }
 
-    console.log("Servidor cerrado.");
+    console.log("Aplicación cerrada.");
   });
 }
 
 process.on("SIGINT", () => {
-  cerrarServidor("SIGINT");
+  cerrarAplicacion("SIGINT");
+});
+
+process.on("SIGTERM", () => {
+  cerrarAplicacion("SIGTERM");
+});
+
+process.on("SIGINT", () => {
+  cerrarAplicacion("SIGINT");
 });
 
 process.on("SIGTERM", () => {
   cerrarServidor("SIGTERM");
 });
-
-
-
-
-
 
 // import "dotenv/config";
 // import express from "express";

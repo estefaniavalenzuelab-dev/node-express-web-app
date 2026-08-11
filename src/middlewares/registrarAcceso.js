@@ -10,6 +10,26 @@ export async function registrarAcceso(
   res,
   next
 ) {
+  const extensionesEstaticas = [
+    ".css",
+    ".js",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".svg",
+    ".ico"
+  ];
+
+  const esEstatico = extensionesEstaticas.some(
+    (extension) =>
+      req.path.endsWith(extension)
+  );
+
+  if (esEstatico) {
+    next();
+    return;
+  }
+
   const fechaHora =
     req.requestTime ||
     new Date().toISOString();

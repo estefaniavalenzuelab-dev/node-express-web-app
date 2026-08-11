@@ -91,3 +91,13 @@
 2026-08-07T23:00:23.239Z | GET | /api/usuarios
 2026-08-07T23:08:08.964Z | GET | /api/usuarios
 2026-08-07T23:17:59.163Z | GET | /api/usuarios
+2026-08-08T01:43:00.081Z | GET | /
+2026-08-08T01:43:00.735Z | GET | /js/app.js
+2026-08-08T01:43:00.733Z | GET | /css/estilos.css
+2026-08-08T01:43:09.493Z | GET | /usuarios
+2026-08-08T01:43:09.683Z | GET | /css/estilos.css
+2026-08-08T01:43:09.688Z | GET | /js/app.js
+2026-08-08T01:43:49.266Z | GET | /api/usuarios
+2026-08-11T01:05:15.288Z | GET | /
+2026-08-11T01:05:16.169Z | GET | /css/estilos.css
+2026-08-11T01:05:16.198Z | GET | /js/app.js
