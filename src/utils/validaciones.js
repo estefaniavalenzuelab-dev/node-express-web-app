@@ -40,3 +40,29 @@ export function validarId(id) {
 
   return idNumerico;
 }
+
+export function validarNombre(nombre) {
+  if (
+    typeof nombre !== "string" ||
+    nombre.trim().length < 2
+  ) {
+    throw new Error(
+      "El nombre debe contener al menos 2 caracteres."
+    );
+  }
+
+  return nombre.trim();
+}
+
+export function validarCorreo(correo) {
+  if (
+    typeof correo !== "string" ||
+    !correo.includes("@")
+  ) {
+    throw new Error(
+      "El correo no tiene un formato válido."
+    );
+  }
+
+  return correo.trim().toLowerCase();
+}

@@ -13,5 +13,14 @@
 
   <p>
     <a href="/usuarios/{{id}}">Ver detalle</a>
+    <a href="/usuarios/{{id}}/editar">Editar</a>
+    <form
+  method="POST"
+  action="/usuarios/{{id}}/eliminar"
+>
+  <button type="submit">
+    Eliminar
+  </button>
+</form>
   </p>
 </article>

@@ -37,7 +37,6 @@ app.use(agregarContextoPeticion);
 app.use(registrarAcceso);
 app.use(agregarDatosVista);
 
-import { registrarAcceso } from "./middlewares/registrarAcceso.js";
 
 app.use(express.json());
 app.use(

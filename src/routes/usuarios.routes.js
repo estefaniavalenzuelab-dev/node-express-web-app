@@ -12,8 +12,9 @@ import {
 
 const router = Router();
 
+
+
 router.get("/", listarUsuarios);
-router.post("/", registrarUsuario);
 
 router.get(
   "/:id",
@@ -21,11 +22,19 @@ router.get(
   buscarUsuario
 );
 
-router.patch(
+router.post("/", registrarUsuario);
+
+router.put(
   "/:id",
   validarIdUsuario,
   actualizarUsuario
 );
+
+//router.patch(
+ // "/:id",
+//  validarIdUsuario,
+//  actualizarUsuario
+//);
 
 router.delete(
   "/:id",

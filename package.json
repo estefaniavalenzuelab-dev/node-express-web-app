@@ -22,6 +22,7 @@
     "hbs": "^4.2.1",
     "morgan": "^1.11.0",
     "pg": "^8.23.0",
+    "pg-cursor": "^2.22.0",
     "yargs": "^18.1.0"
   },
   "devDependencies": {

@@ -3,30 +3,22 @@ import {
   eliminarUsuario,
   modificarUsuario,
   obtenerUsuarioPorId,
-  obtenerUsuarios
+  obtenerUsuarios,
+  obtenerUsuariosConFiltros
 } from "../services/usuarios.service.js";
 
 import { crearErrorHttp } from "../utils/errores.js";
 
-export async function listarUsuarios(req, res, next) {
+export async function listarUsuarios(
+  req,
+  res,
+  next
+) {
   try {
-    let usuarios = await obtenerUsuarios();
-    const { activo } = req.query;
-
-    if (activo !== undefined) {
-      if (activo !== "true" && activo !== "false") {
-        throw crearErrorHttp(
-          'El filtro "activo" debe ser "true" o "false".',
-          400
-        );
-      }
-
-      const valorActivo = activo === "true";
-
-      usuarios = usuarios.filter(
-        (usuario) => usuario.activo === valorActivo
+    const usuarios =
+      await obtenerUsuariosConFiltros(
+        req.query
       );
-    }
 
     res.status(200).json({
       status: "ok",
@@ -34,7 +26,12 @@ export async function listarUsuarios(req, res, next) {
       data: usuarios,
       meta: {
         total: usuarios.length,
-        requestTime: req.requestTime
+        filters: {
+          nombre:
+            req.query.nombre ?? null,
+          activo:
+            req.query.activo ?? null
+        }
       }
     });
   } catch (error) {
@@ -165,6 +162,25 @@ export async function borrarUsuario(
     res.status(200).json({
       status: "ok",
       message: "Usuario eliminado correctamente.",
+      data: usuario
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function crearUsuarioController(
+  req,
+  res,
+  next
+) {
+  try {
+    const usuario =
+      await crearUsuario(req.body);
+
+    res.status(201).json({
+      status: "ok",
+      message: "Usuario creado",
       data: usuario
     });
   } catch (error) {

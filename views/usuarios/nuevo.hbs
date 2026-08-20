@@ -1,0 +1,72 @@
+<h1>{{titulo}}</h1>
+
+{{#if error}}
+  <div role="alert">
+    <strong>
+      No fue posible crear el usuario:
+    </strong>
+
+    {{error}}
+  </div>
+{{/if}}
+
+<form
+  method="POST"
+  action="/usuarios"
+>
+  <div>
+    <label for="nombre">
+      Nombre
+    </label>
+
+    <input
+      id="nombre"
+      name="nombre"
+      type="text"
+      required
+      minlength="2"
+      value="{{valores.nombre}}"
+    >
+  </div>
+
+  <div>
+    <label for="correo">
+      Correo
+    </label>
+
+    <input
+      id="correo"
+      name="correo"
+      type="email"
+      required
+      value="{{valores.correo}}"
+    >
+  </div>
+
+  <div>
+    <label for="activo">
+      Estado
+    </label>
+
+    <select
+      id="activo"
+      name="activo"
+    >
+      <option value="true">
+        Activo
+      </option>
+
+      <option value="false">
+        Inactivo
+      </option>
+    </select>
+  </div>
+
+  <button type="submit">
+    Crear usuario
+  </button>
+
+  <a href="/usuarios">
+    Cancelar
+  </a>
+</form>

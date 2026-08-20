@@ -1,0 +1,67 @@
+<h1>{{titulo}}</h1>
+
+{{#if error}}
+  <div role="alert">
+    {{error}}
+  </div>
+{{/if}}
+
+<form
+  method="POST"
+  action="/usuarios/{{usuario.id}}/editar"
+>
+  <div>
+    <label for="nombre">
+      Nombre
+    </label>
+
+    <input
+      id="nombre"
+      name="nombre"
+      type="text"
+      required
+      value="{{usuario.nombre}}"
+    >
+  </div>
+
+  <div>
+    <label for="correo">
+      Correo
+    </label>
+
+    <input
+      id="correo"
+      name="correo"
+      type="email"
+      required
+      value="{{usuario.correo}}"
+    >
+  </div>
+
+  <div>
+    <label for="activo">
+      Estado
+    </label>
+
+    <select
+      id="activo"
+      name="activo"
+    >
+      <option value="true">
+        Activo
+      </option>
+
+      <option value="false">
+        Inactivo
+      </option>
+    </select>
+  </div>
+
+  <button type="submit">
+    Guardar cambios
+  </button>
+
+  <a href="/usuarios">
+    Cancelar
+  </a>
+</form>
