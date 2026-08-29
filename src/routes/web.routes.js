@@ -5,20 +5,32 @@ import {
 } from "../controllers/usuarios.controller.js";
 import { validarIdUsuario } from "../middlewares/validarIdUsuario.js";
 import { crearUsuario } from "../services/usuarios.service.js";
-import { mostrarFormularioNuevoUsuario, crearUsuarioWeb, mostrarFormularioEditarUsuario, actualizarUsuarioWeb, eliminarUsuarioWeb } from "../controllers/usuarios-web.controller.js";
+import { mostrarFormularioNuevoUsuario, crearUsuarioWeb, mostrarFormularioEditarUsuario, actualizarUsuarioWeb, eliminarUsuarioWeb, mostrarRegistroCompleto, registrarUsuarioCompletoWeb } from "../controllers/usuarios-web.controller.js";
 
 const router = Router();
 
 router.get("/usuarios", mostrarUsuarios);
-router.get(
-  "/usuarios/:id",
-  validarIdUsuario,
-  mostrarUsuario
-);
+
 
 router.get(
   "/usuarios-nuevo",
   mostrarFormularioNuevoUsuario
+);
+
+router.get(
+  "/usuarios/registro-completo",
+  mostrarRegistroCompleto
+);
+
+router.post(
+  "/usuarios/registro-completo",
+  registrarUsuarioCompletoWeb
+);
+
+router.get(
+  "/usuarios/:id",
+  validarIdUsuario,
+  mostrarUsuario
 );
 
 router.post(

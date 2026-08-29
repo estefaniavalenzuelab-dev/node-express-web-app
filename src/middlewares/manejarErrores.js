@@ -1,3 +1,33 @@
+export function manejarErrores(
+  error,
+  req,
+  res,
+  next
+) {
+  const statusCode =
+    error.statusCode ??
+    500;
+
+  const message =
+    statusCode >= 500
+      ? "Error interno del servidor."
+      : error.message;
+
+  console.error(error);
+
+  return res
+    .status(statusCode)
+    .json({
+      status:
+        "error",
+      message,
+      data:
+        null
+    });
+}
+
+
+/*
 export function manejarErrores(error, req, res, next) {
   const statusCode = error.statusCode || 500;
   const esDesarrollo =
@@ -37,3 +67,4 @@ export function manejarErrores(error, req, res, next) {
       : undefined
   });
 }
+  */

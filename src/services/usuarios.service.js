@@ -4,7 +4,8 @@ import {
   buscarTodos,
   buscarConFiltros,
   insertar,
-  eliminar
+  eliminar,
+  insertarConCliente
 } from "../repositories/usuarios.repository.js";
 
 import {
@@ -13,6 +14,7 @@ import {
 } from "../utils/archivos.js";
 import { crearErrorHttp } from "../utils/errores.js";
 import { RUTA_USUARIOS } from "../utils/rutas.js";
+import { registrarFalloTransaccion } from "../utils/logs.js"; 
 import {
   convertirBooleano,
   esCorreoValido,
@@ -21,6 +23,12 @@ import {
   validarNombre,
   validarCorreo
 } from "../utils/validaciones.js";
+
+import {
+  insertarHistorial
+} from "../repositories/historial.repository.js";
+
+import { pool } from "../config/database.js";
 
 
 
@@ -282,4 +290,91 @@ export async function obtenerUsuariosConFiltros(
     nombre,
     activo
   });
+}
+
+export async function registrarUsuarioCompleto(
+  datos
+) {
+  const nombre =
+    validarNombre(datos.nombre);
+
+  const correo =
+    validarCorreo(datos.correo);
+
+  const activo =
+    datos.activo === undefined
+      ? true
+      : convertirBooleano(
+          datos.activo
+        );
+
+  const client =
+    await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const usuario =
+      await insertarConCliente(
+        client,
+        {
+          nombre,
+          correo,
+          activo
+        }
+      );
+
+if (datos.forzarError === true) {
+      throw new Error(
+        "Error forzado para demostrar ROLLBACK."
+      );
+    }
+
+    const historial =
+      await insertarHistorial(
+        client,
+        {
+          usuarioId: usuario.id,
+          evento: "USUARIO_CREADO",
+          detalle:
+            "Registro inicial del usuario"
+        }
+      );
+
+    await client.query("COMMIT");
+
+    return {
+      usuario,
+      historial
+    };
+  } catch (error) {
+  try {
+    await client.query("ROLLBACK");
+  } catch (rollbackError) {
+    console.error(
+      "Error durante ROLLBACK:",
+      rollbackError.message
+    );
+  }
+
+  try {
+    await registrarFalloTransaccion(
+      error,
+      {
+        operacion:
+          "registrarUsuarioCompleto",
+        correo
+      }
+    );
+  } catch (logError) {
+    console.error(
+      "No fue posible registrar el fallo:",
+      logError.message
+    );
+  }
+
+  throw error;
+} finally {
+    client.release();
+  }
 }

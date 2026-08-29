@@ -19,6 +19,23 @@ import usuariosRouter from "./routes/usuarios.routes.js";
 import webRouter from "./routes/web.routes.js";
 import { obtenerMensajeInicio } from "./utils/mensajes.js";
 import { RUTA_PARTIALS, RUTA_PUBLIC, RUTA_VIEWS } from "./utils/rutas.js";
+import { probarSequelize } from "./ejemplos/probar-sequelize.js";
+import { sequelize } from "./config/sequelize.js";
+import usuariosOrmRouter
+  from "./routes/usuarios-orm.routes.js";
+import pedidosOrmRouter
+  from "./routes/pedidos-orm.routes.js";
+import usuariosV1Router
+  from "./routes/usuarios-v1.routes.js";
+import pedidosV1Router
+  from "./routes/pedidos-v1.routes.js";
+
+
+try {
+  await probarSequelize(); 
+} catch (error) {
+  console.error("Error al probar Sequelize:", error.message);
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -49,6 +66,26 @@ app.use(express.static(RUTA_PUBLIC));
 app.use("/", indexRouter);
 app.use("/", webRouter);
 app.use("/api/usuarios", usuariosRouter);
+
+app.use(
+  "/api/orm/usuarios",
+  usuariosOrmRouter
+);
+
+app.use(
+  "/api/orm/pedidos",
+  pedidosOrmRouter
+);
+
+app.use(
+  "/api/v1/usuarios",
+  usuariosV1Router
+);
+
+app.use(
+  "/api/v1/pedidos",
+  pedidosV1Router
+);
 
 app.use(rutaNoEncontrada);
 app.use(manejarErrores);

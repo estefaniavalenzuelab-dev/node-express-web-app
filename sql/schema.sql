@@ -6,3 +6,126 @@ CREATE TABLE IF NOT EXISTS usuarios (
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS historial_usuarios (
+  id INTEGER
+    GENERATED ALWAYS AS IDENTITY
+    PRIMARY KEY,
+
+  usuario_id INTEGER
+    NOT NULL
+    REFERENCES usuarios(id)
+    ON DELETE CASCADE,
+
+  evento VARCHAR(120)
+    NOT NULL,
+
+  detalle TEXT,
+
+  created_at TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS perfiles (
+  id INTEGER
+    GENERATED ALWAYS AS IDENTITY
+    PRIMARY KEY,
+
+  usuario_id INTEGER
+    NOT NULL
+    UNIQUE
+    REFERENCES usuarios(id)
+    ON DELETE CASCADE,
+
+  telefono VARCHAR(40),
+
+  direccion VARCHAR(250),
+
+  fecha_nacimiento DATE,
+
+  created_at TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP,
+
+  updated_at TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pedidos (
+  id INTEGER
+    GENERATED ALWAYS AS IDENTITY
+    PRIMARY KEY,
+
+  usuario_id INTEGER
+    NOT NULL
+    REFERENCES usuarios(id)
+    ON DELETE CASCADE,
+
+  fecha TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP,
+
+  estado VARCHAR(40)
+    NOT NULL
+    DEFAULT 'pendiente',
+
+  total NUMERIC(12, 2)
+    NOT NULL
+    DEFAULT 0,
+
+  created_at TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP,
+
+  updated_at TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS roles (
+  id INTEGER
+    GENERATED ALWAYS AS IDENTITY
+    PRIMARY KEY,
+
+  nombre VARCHAR(80)
+    NOT NULL
+    UNIQUE,
+
+  created_at TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP,
+
+  updated_at TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS usuario_roles (
+  id INTEGER
+    GENERATED ALWAYS AS IDENTITY
+    PRIMARY KEY,
+
+  usuario_id INTEGER
+    NOT NULL
+    REFERENCES usuarios(id)
+    ON DELETE CASCADE,
+
+  rol_id INTEGER
+    NOT NULL
+    REFERENCES roles(id)
+    ON DELETE CASCADE,
+
+  fecha_asignacion TIMESTAMPTZ
+    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP,
+
+  asignado_por VARCHAR(120),
+
+  CONSTRAINT usuario_roles_unico
+    UNIQUE (
+      usuario_id,
+      rol_id
+    )
+);

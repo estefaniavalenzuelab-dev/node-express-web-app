@@ -197,3 +197,42 @@ export async function eliminar(id) {
 
   return resultado.rows[0] ?? null;
 }
+
+export async function insertarConCliente(
+  client,
+  {
+    nombre,
+    correo,
+    activo
+  }
+) {
+  const resultado =
+    await client.query(
+      `
+        INSERT INTO usuarios (
+          nombre,
+          correo,
+          activo
+        )
+        VALUES (
+          $1,
+          $2,
+          $3
+        )
+        RETURNING
+          id,
+          nombre,
+          correo,
+          activo,
+          created_at,
+          updated_at
+      `,
+      [
+        nombre,
+        correo,
+        activo
+      ]
+    );
+
+  return resultado.rows[0];
+}
