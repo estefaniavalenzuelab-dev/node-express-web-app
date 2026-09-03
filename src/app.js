@@ -29,6 +29,8 @@ import usuariosV1Router
   from "./routes/usuarios-v1.routes.js";
 import pedidosV1Router
   from "./routes/pedidos-v1.routes.js";
+import authRouter
+  from "./routes/auth.routes.js";
 
 
 try {
@@ -85,6 +87,11 @@ app.use(
 app.use(
   "/api/v1/pedidos",
   pedidosV1Router
+);
+
+app.use(
+  "/api/v1/auth",
+  authRouter
 );
 
 app.use(rutaNoEncontrada);

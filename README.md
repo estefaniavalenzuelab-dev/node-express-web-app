@@ -31,6 +31,9 @@ Aplicación web desarrollada con Node.js y Express como proyecto incremental.
 
 ### variables de entorno
 
+.env
+.env.example
+.gitignore
 
 ### creación de base
 
@@ -80,9 +83,42 @@ inicial y el arranque de la aplicación Express.
 
 ### CRUD
 
+Rrepresenta:
+
+#### Create: INSERT
+
+ej metodo POST:
+http://localhost:3000/api/usuarios
+
+{
+  "nombre": "Camila Rojas",
+  "correo": "camila.rojas@example.com",
+  "activo": true
+}
+
+#### Read: SELECT
+
+
+#### Update: UPDATE
+#### Delete: DELETE
+
 ### transacciones
 
+La aplicación utiliza transacciones PostgreSQL cuando una operación de negocio requiere múltiples modificaciones.
+
+Ejemplo:
+
+```text
+crear usuario
++
+crear historial
+
 ### ORM
+
+Ejemplo:
+
+```text
+GET /api/orm/usuarios/:id/pedidos
 
 ### Modelos
 
@@ -101,4 +137,80 @@ Usuario 1 ─── 1 Perfil
 Usuario 1 ─── N Pedido
 Usuario N ─── M Rol
 
-comparación pg vs Sequelize
+## Comparación pg vs Sequelize
+
+```markdown
+### SQL manual vs ORM
+
+Durante el módulo se implementaron consultas mediante `pg` y posteriormente mediante Sequelize.
+
+`pg` permitió comprender directamente:
+
+- SQL.
+- Parámetros.
+- Resultados.
+- Transacciones.
+
+Sequelize agregó:
+
+- Modelos.
+- Métodos CRUD.
+- Asociaciones.
+- Eager loading mediante `include`.
+
+Ambas alternativas consultan PostgreSQL.
+
+## 105. Evidencias recomendadas
+
+Guarda capturas de:
+
+1. Tabla `historial_usuarios`.
+2. `BEGIN` manual.
+3. `ROLLBACK` manual.
+4. `COMMIT` manual.
+5. Transacción exitosa desde Postman.
+6. Usuario creado.
+7. Historial creado.
+8. Petición con error forzado.
+9. Respuesta de error.
+10. Consulta que demuestra que el usuario no existe después del rollback.
+11. Log de transacción fallida.
+12. Código donde se observa `client.release()`.
+
+La consigna solicita expresamente evidencia de rollback cuando se fuerza un error.
+
+---
+
+## 106. Justificaciones técnicas esperadas
+
+El estudiante debería poder responder:
+
+### ¿Por qué se utilizó una transacción?
+
+Porque la operación contiene varias modificaciones que deben comportarse como una unidad.
+
+### ¿Por qué se utiliza una sola conexión?
+
+Porque el estado de la transacción pertenece a una conexión PostgreSQL concreta.
+
+### ¿Por qué no utilizar `pool.query()` para cada paso?
+
+Porque cada llamada puede utilizar una conexión distinta y las operaciones dejarían de pertenecer a la misma transacción.
+
+### ¿Por qué se ejecuta rollback?
+
+Para deshacer las modificaciones realizadas dentro de la transacción cuando una operación falla.
+
+### ¿Por qué se libera el cliente?
+
+Para devolver la conexión al pool y permitir que otras operaciones la reutilicen.
+
+---
+
+## 107. Commits sugeridos
+
+```text
+feat: agregar historial de usuarios
+feat: implementar transaccion de registro
+feat: registrar transacciones fallidas
+docs: documentar transacciones postgres

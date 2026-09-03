@@ -300,3 +300,4 @@
 2026-08-29T21:06:01.946Z | GET | /api/v1/usuarios/2
 2026-08-29T21:06:44.138Z | GET | /api/v1/usuarios/2/pedidos
 2026-08-29T21:07:12.552Z | GET | /api/v1/usuarios/2
+2026-09-03T15:56:05.893Z | POST | /api/v1/auth/registro
