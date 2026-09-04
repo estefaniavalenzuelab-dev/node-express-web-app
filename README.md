@@ -396,87 +396,109 @@ También utiliza middlewares para mantener esta lógica separada del resto de la
 # Evidencias recomendadas
 
 01- Postgresql conectado
+
 <img width="682" height="767" alt="1 PostgreSQL conectado" src="https://github.com/user-attachments/assets/2e17ad7a-d638-4fc6-ab21-7235669c898b" />
 
 
 02- Tablas esquema
+
 <img width="681" height="725" alt="2 Tablas del esquema" src="https://github.com/user-attachments/assets/66e4ad94-e282-4d0d-ac51-0417bf899f3c" />
 
 
 03- Get usuarios
+
 <img width="1023" height="696" alt="3 Obtener todos los usuarios" src="https://github.com/user-attachments/assets/87c201ee-3198-4d50-8419-7d7cb838185b" />
 
 
 04- Post usuario
+
 <img width="506" height="697" alt="4  Creación de usuario POST" src="https://github.com/user-attachments/assets/f0a105ac-8df7-4191-8d24-6e571534f075" />
 
 
 05- Put usuario
+
 <img width="507" height="697" alt="5 UPDATE api usuarios id" src="https://github.com/user-attachments/assets/3b6bff2d-e875-4a23-8800-a3995bdb0033" />
 
 
 06- Delete usuario
+
 <img width="509" height="697" alt="6 Delete api usuarios id" src="https://github.com/user-attachments/assets/58d35b6f-b8ed-44f7-8c8e-80a05cd1ac82" />
 
 
 07- Formulario web
+
 <img width="935" height="646" alt="7 1 Formulario web de usuarios" src="https://github.com/user-attachments/assets/568db3d4-25ae-4be8-b8ec-f3f15ec16ae6" />
 <img width="429" height="366" alt="7 2 Formulario web de usuarios" src="https://github.com/user-attachments/assets/76ed8717-4c7b-4b5a-b76f-a5a61db3e4f0" />
 
 
 08- Transaccion exitosa
+
 <img width="1364" height="709" alt="08-commit-transaccion png" src="https://github.com/user-attachments/assets/b12a1be9-0876-40e9-a753-5b2a8ad2e8bc" />
 
 
 09- Rollback comprobado
+
 <img width="1324" height="767" alt="9 error forzado ROLLBACK" src="https://github.com/user-attachments/assets/2c9fadf5-dbfe-4270-82ba-9051eff3a965" />
 <img width="673" height="185" alt="9b-rollback-comprobado png" src="https://github.com/user-attachments/assets/9d1bded7-8a0e-448c-991a-32f37cd6c7a6" />
 
 
 10- Modelo usuario sequelize
+
 <img width="619" height="706" alt="10 Modelo Sequelize Usuario" src="https://github.com/user-attachments/assets/a9a4a508-ddd3-448a-85b5-77b1bfc1ea38" />
 
 
 11- Crud orm
+
 <img width="680" height="692" alt="11  CRUD ORM" src="https://github.com/user-attachments/assets/3d13ac59-2d35-4936-8a0d-db7be1748f05" />
 
 
 12- Relacion 1:1
+
 <img width="678" height="296" alt="12 Relación 11" src="https://github.com/user-attachments/assets/bbff3d55-0b76-4f5c-8481-caed7fe69a49" />
 
 
 13- Relacion 1:N
+
 <img width="1365" height="700" alt="13 Relación 1N" src="https://github.com/user-attachments/assets/29cf9e82-88dc-417c-80a4-d9664e330df5" />
 
 
 14- Relacion N:M
+
 <img width="681" height="767" alt="14  Relación NM" src="https://github.com/user-attachments/assets/17354612-395f-46d7-b0bd-9df7bbfe1f5f" />
 
 
 15- Tabla usuario roles
+
 <img width="680" height="729" alt="15 Tabla usuario_roles" src="https://github.com/user-attachments/assets/5e6335a4-7290-4ec0-a6b5-c43550c1905d" />
 
 
 16- Consulta include
+
 <img width="1365" height="699" alt="16-consulta-include" src="https://github.com/user-attachments/assets/97f93cd4-0251-4c6c-b121-99998150408d" />
 
 
 17- Crud pedido
 
+
 <img width="681" height="702" alt="17a  post pedido" src="https://github.com/user-attachments/assets/b90a8318-9e7c-4f42-b476-a92289b72c1d" />
+
    
 <img width="679" height="696" alt="17b get pedido" src="https://github.com/user-attachments/assets/490874d3-d160-46f5-842b-4a0622ceb3d3" />
 
+
 <img width="682" height="691" alt="17c put pedido" src="https://github.com/user-attachments/assets/b30d2020-c0c5-43ed-aeef-c5a436a88c8c" />
+
 
 <img width="682" height="699" alt="17d delete pedido" src="https://github.com/user-attachments/assets/b2b83410-3450-4c18-9008-109e8ebea6f6" />
 
 
 18- Manejo error
+
 <img width="676" height="562" alt="18 Manejo de un error" src="https://github.com/user-attachments/assets/6d94482f-fb73-406c-9c8f-743eeb65c237" />
 
 
 19- Estructura modular
+
 <img width="191" height="500" alt="19 Estructura modular" src="https://github.com/user-attachments/assets/53c8e330-8979-48bb-893b-e459752a5788" />
 
 
