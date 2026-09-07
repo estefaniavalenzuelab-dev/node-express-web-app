@@ -4,6 +4,8 @@ Aplicación web desarrollada con **Node.js y Express** como proyecto incremental
 
 En el **Módulo 7** se incorporó la conexión con una base de datos PostgreSQL, operaciones CRUD, transacciones y Sequelize como ORM.
 
+En el **Módulo 8** se implementó una API RESTful versionada, autenticación mediante JWT, rutas protegidas y subida de archivos.
+
 ## Requisitos
 
 * Node.js 18 o superior
@@ -39,6 +41,7 @@ Crear un archivo `.env` a partir de `.env.example` y configurar las credenciales
 
 ```env id="4qkqdt"
 PORT=3000
+
 NODE_ENV=development
 
 DB_HOST=localhost
@@ -46,9 +49,12 @@ DB_PORT=5432
 DB_NAME=node_express_app
 DB_USER=postgres
 DB_PASSWORD=
+
+JWT_SECRET=
+JWT_EXPIRES_IN=1h
 ```
 
-El archivo `.env` permite mantener las credenciales de la base de datos fuera del código y no debe subirse al repositorio.
+El archivo .env permite mantener las credenciales de PostgreSQL y la configuración de JWT fuera del código y no debe subirse al repositorio.
 
 ## Creación de la base de datos
 
@@ -393,7 +399,262 @@ La aplicación incluye manejo de errores y validaciones para controlar problemas
 
 También utiliza middlewares para mantener esta lógica separada del resto de la aplicación.
 
-# Evidencias recomendadas
+
+# API RESTful – Módulo 8
+
+En el Módulo 8 se implementó una API RESTful versionada para permitir el acceso a los recursos de la aplicación desde clientes externos como Postman.
+
+La versión utilizada es:
+
+```text
+/api/v1
+```
+
+Las respuestas de la API mantienen una estructura consistente utilizando:
+
+```text
+status
+message
+data
+```
+
+## Endpoints de Usuarios
+
+La API permite realizar operaciones CRUD sobre usuarios.
+
+```text
+GET    /api/v1/usuarios
+GET    /api/v1/usuarios/:id
+POST   /api/v1/usuarios
+PUT    /api/v1/usuarios/:id
+DELETE /api/v1/usuarios/:id
+```
+
+Se utilizan métodos GET, POST, PUT y DELETE para consultar, crear, actualizar y eliminar usuarios.
+
+## Endpoints de Pedidos
+
+La API permite realizar operaciones CRUD sobre pedidos.
+
+```text
+GET    /api/v1/pedidos
+GET    /api/v1/pedidos/:id
+POST   /api/v1/pedidos
+PUT    /api/v1/pedidos/:id
+DELETE /api/v1/pedidos/:id
+```
+Estas rutas permiten consultar, crear, actualizar y eliminar pedidos.
+
+## HATEOAS y respuestas
+
+Las respuestas de la API utilizan una estructura consistente con:
+
+```text
+status
+message
+data
+```
+
+Además, en las respuestas de usuarios se incluyen enlaces relacionados mediante HATEOAS.
+
+Ejemplo:
+
+```json
+{
+  "links": {
+    "self": "/api/v1/usuarios/1",
+    "pedidos": "/api/v1/usuarios/1/pedidos"
+  }
+}
+```
+# Autenticación JWT
+
+La aplicación utiliza JSON Web Token (JWT) para autenticar usuarios y proteger rutas.
+
+## Registro
+
+```text
+POST /api/v1/auth/registro
+```
+## Login
+```text
+POST /api/v1/auth/login
+```
+El login genera un token JWT válido.
+
+## Usuario autenticado
+
+```text
+GET /api/v1/auth/me
+```
+El token contiene información como:
+
+```text
+iat
+exp
+sub
+```
+
+Para acceder a las rutas protegidas, el token debe enviarse mediante:
+
+```text
+Authorization: Bearer <token>
+```
+
+Se realizaron pruebas con token válido, sin token, token inválido y token expirado.
+
+
+## Rutas protegidas
+
+La aplicación protege rutas que requieren autenticación mediante JWT.
+
+Entre las rutas protegidas se encuentran:
+
+```text
+GET /api/v1/pedidos
+GET /api/v1/auth/me
+```
+
+Si no se envía un token válido, la API rechaza la petición.
+
+El token se envía en el header:
+
+```text
+Authorization: Bearer <token>
+```
+# Subida de archivos
+
+La aplicación utiliza `express-fileupload` para recibir archivos mediante:
+
+```text
+multipart/form-data
+```
+
+## Subir archivo
+```text
+POST /api/v1/upload
+```
+El archivo debe enviarse en el campo:
+
+```text
+archivo
+```
+
+La aplicación valida:
+
+existencia del archivo
+extensión permitida
+tamaño máximo de 5 MB
+
+Las extensiones permitidas son:
+
+```text
+.jpg
+.jpeg
+.png
+.webp
+```
+Los archivos se renombran antes de guardarse en:
+```text
+public/uploads/
+```
+## Eliminar archivo
+```text
+DELETE /api/v1/upload/:nombre
+```
+La aplicación también controla el intento de eliminar un archivo inexistente.
+
+## PLUS – Imagen de Perfil
+
+Se implementó una funcionalidad adicional para asociar una imagen a un perfil.
+
+```text
+POST /api/v1/perfiles/:id/imagen
+```
+La imagen se envía en el campo:
+```text
+archivo
+```
+El archivo se guarda en:
+```text
+public/uploads/
+```
+y su nombre se almacena en el campo:
+```text
+Perfil.imagen
+```
+La implementación del PLUS se organiza en:
+```text
+src/
+├── routes/
+│   └── perfiles-v1.routes.js
+├── controllers/
+│   └── perfil-imagen.controller.js
+└── services/
+    └── perfil-imagen.service.js
+```
+Si el perfil ya tenía una imagen, la aplicación gestiona el reemplazo del archivo anterior.
+
+# Decisiones técnicas
+
+## ¿Cómo se separaron rutas y controladores?
+
+Las rutas definen los endpoints y sus middlewares. Los controladores interpretan las peticiones y construyen las respuestas HTTP, mientras los servicios concentran la lógica y el acceso a datos o archivos.
+
+Esta separación mantiene la aplicación modular y evita duplicar lógica.
+
+## ¿Qué validaciones se realizan antes de modificar datos?
+
+La API valida los datos requeridos, tipos y condiciones propias de cada operación antes de guardar los cambios.
+
+Además, Sequelize y PostgreSQL mantienen restricciones adicionales de integridad.
+
+## ¿Por qué se protegieron determinadas rutas?
+
+Se protegieron rutas que requieren autenticación para acceder o modificar datos.
+
+Las rutas de registro y login permanecen públicas porque son necesarias para obtener una identidad autenticada.
+
+## ¿Cómo se envía el token?
+
+El token se envía mediante:
+
+```text
+Authorization: Bearer <token>
+```
+
+## ¿Dónde se almacena el token?
+
+Durante las pruebas de backend se utilizó Postman para conservar y reutilizar el token.
+
+También se revisaron `localStorage` y `sessionStorage` como mecanismos de almacenamiento disponibles en el navegador.
+
+## ¿Cómo se validan los archivos?
+
+El endpoint comprueba que exista un archivo, valida la extensión y el tamaño máximo permitido, genera un nombre controlado y lo almacena en `public/uploads/`.
+
+# Integración de los módulos
+
+El proyecto fue desarrollado de forma incremental:
+
+```text
+Módulo 6
+Servidor, rutas, vistas y estructura Express
+
+        ↓
+
+Módulo 7
+PostgreSQL, CRUD, transacciones, Sequelize y relaciones
+
+        ↓
+
+Módulo 8
+API RESTful, JWT y subida de archivos
+```
+
+El resultado final es un backend integrado que reúne los contenidos trabajados durante los módulos 6, 7 y 8.
+
+# Evidencias – Módulo 7
 
 01- Postgresql conectado
 
@@ -502,9 +763,203 @@ También utiliza middlewares para mantener esta lógica separada del resto de la
 <img width="191" height="500" alt="19 Estructura modular" src="https://github.com/user-attachments/assets/53c8e330-8979-48bb-893b-e459752a5788" />
 
 
+# Evidencias – Módulo 8
+
+## 01 – GET usuarios
+
+<img width="682" height="701" alt="01 get api" src="https://github.com/user-attachments/assets/d3fc7580-d447-4497-87de-732d5d32e809" />
+
+
+`GET /api/v1/usuarios`
+
+## 02 – POST usuario
+
+<img width="679" height="698" alt="02  POST API V1" src="https://github.com/user-attachments/assets/6908aacc-1ebb-44fc-a9c4-8da4e9ea1693" />
+
+
+`POST /api/v1/usuarios`
+
+## 03 – PUT usuario
+
+<img width="682" height="703" alt="03  PUT api v1 usuarios id" src="https://github.com/user-attachments/assets/bfeefee8-fbd6-4a63-9082-f2c3f92dffa1" />
+
+
+`PUT /api/v1/usuarios/:id`
+
+## 04 – DELETE usuario
+
+<img width="682" height="700" alt="04  DELETE api v1 usuarios id" src="https://github.com/user-attachments/assets/268d02ff-9fa1-4c9e-9fba-ff245ce4e57f" />
+`DELETE /api/v1/usuarios/:id`
+
+## 05 – HATEOAS
+
+Respuesta de la API con enlaces relacionados mediante HATEOAS.
+
+## 06 – Registro de usuario
+
+<img width="678" height="767" alt="06 creacion de usuario con clave" src="https://github.com/user-attachments/assets/72557952-7d2c-451c-8988-21c329ca4765" />
+
+
+`POST /api/v1/auth/registro`
+
+## 07 – Login
+
+<img width="682" height="767" alt="07  Login correcto" src="https://github.com/user-attachments/assets/f7cb1400-97a8-4891-8fc5-8e552e9a9bfd" />
+
+
+`POST /api/v1/auth/login`
+
+## 08 – JWT válido
+
+<img width="682" height="767" alt="08  JWT válido" src="https://github.com/user-attachments/assets/4f209808-eb3e-4230-bd7f-c5d97957d263" />
+
+
+Token JWT generado correctamente después del login.
+
+## 08.1 – JWT decodificado
+
+<img width="682" height="767" alt="8 1 jwt decodificado" src="https://github.com/user-attachments/assets/45dc44b6-86c0-46fc-b4a0-1bad4890adbd" />
+
+
+Verificación de los atributos `iat` y `exp` del token.
+
+## 09 – Ruta protegida sin token
+
+<img width="682" height="767" alt="09  Ruta protegida sin token" src="https://github.com/user-attachments/assets/db1a4f42-fecd-44b2-be45-248b8f98b8e1" />
+
+
+Petición rechazada al intentar acceder a una ruta protegida sin autenticación.
+
+## 10 – Ruta protegida con token
+
+<img width="682" height="697" alt="10  Ruta con token" src="https://github.com/user-attachments/assets/e3d1c836-0f24-4b6c-a140-a70a36b7957a" />
+
+
+Acceso correcto a una ruta protegida utilizando `Authorization: Bearer <token>`.
+
+## 11 – Token inválido
+
+Verificación del rechazo de un token inválido.
+
+<img width="682" height="767" alt="11  Token inválido" src="https://github.com/user-attachments/assets/c5e1f398-e4c7-4587-af81-fa47bbca1388" />
+
+
+## 12 – Token expirado
+
+<img width="680" height="700" alt="12  token expirado" src="https://github.com/user-attachments/assets/112c406a-d9a8-4578-9f76-be1d07db4e37" />
+
+
+Verificación del rechazo de un token expirado.
+
+## 13 – Upload correcto
+
+<img width="682" height="729" alt="13  upload ok" src="https://github.com/user-attachments/assets/7a783e8a-77cf-4cc5-93da-9ee776bc1fef" />
+
+
+Archivo válido subido correctamente mediante `multipart/form-data`.
+
+## 14 – Upload sin archivo
+
+<img width="682" height="697" alt="14  upload sin archivo" src="https://github.com/user-attachments/assets/4442e31b-4149-415d-957e-ae8aec0bd26c" />
+
+
+Respuesta de error al realizar la petición sin enviar un archivo.
+
+## 15 – Extensión no permitida
+
+<img width="679" height="701" alt="15  Extensión no permitida" src="https://github.com/user-attachments/assets/ed07b0ba-07a2-4a76-8a86-cc0fa805be4c" />
+
+
+Respuesta de error al intentar subir un archivo con una extensión no permitida.
+
+## 16 – Archivo demasiado grande
+
+<img width="683" height="703" alt="16  upload archivo grande" src="https://github.com/user-attachments/assets/017cc4a5-82a8-4fdd-b3cb-dd1c87a82c03" />
+
+
+Respuesta `413` al intentar subir un archivo mayor al tamaño máximo permitido de 5 MB.
+
+## 17 – Eliminar archivo
+
+<img width="679" height="696" alt="17  Eliminar archivo" src="https://github.com/user-attachments/assets/30dd8971-ab3d-4c75-9093-9a100a442c2e" />
+
+
+Eliminación correcta de un archivo almacenado.
+
+## 17b – Eliminar archivo inexistente
+
+<img width="678" height="696" alt="17b  Eliminar archivo inexistente" src="https://github.com/user-attachments/assets/f17acabd-017d-4d94-9bf9-30bfc6c4b1c2" />
+
+
+Respuesta `404` al intentar eliminar un archivo que no existe.
+
+## 18 – Carpeta uploads
+<img width="216" height="767" alt="18  Public uploads" src="https://github.com/user-attachments/assets/bb6612fa-84a6-4152-aa33-04a8d1f131a9" />
+
+
+Comprobación de los archivos almacenados en `public/uploads/`.
+
+## 19 – PLUS: Imagen de Perfil
+
+<img width="683" height="696" alt="PLUS imagen válida" src="https://github.com/user-attachments/assets/f9b5e179-b60d-4c56-83a0-03c096e9f785" />
+
+
+Subida de una imagen y asociación con un Perfil mediante:
+
+`POST /api/v1/perfiles/:id/imagen`
+
+## 20 – PLUS: Perfil.imagen en PostgreSQL
+
+<img width="979" height="278" alt="20 – PLUS Perfil imagen psql" src="https://github.com/user-attachments/assets/2a24e28d-36ef-45a7-b6c2-84017851e0eb" />
+
+
+Comprobación en PostgreSQL de que el nombre de la imagen quedó asociado al campo `imagen` del Perfil.
+
+## 21 – PLUS: Imagen guardada
+<img width="1365" height="646" alt="21  PLUS imagen guardada" src="https://github.com/user-attachments/assets/8fc78e44-d147-4c4f-956a-b33f0391e995" />
+
+
+Comprobación de que la imagen asociada al Perfil fue guardada correctamente en `public/uploads/`.
+
+## PLUS – Reemplazo de imagen
+
+<img width="1365" height="650" alt="PLUS reemplazar img" src="https://github.com/user-attachments/assets/a6696995-287e-44f4-9636-72c9d2ad4454" />
+
+
+Comprobación del reemplazo de una imagen de perfil existente y gestión de la imagen anterior.
+
+## 22 – Estructura modular M8 
+<img width="182" height="626" alt="22 estructura modular m8" src="https://github.com/user-attachments/assets/234afd9b-c2b9-47c7-a14c-a20596f81787" />
+
+
+Comprobación de la estructura modular final del proyecto con carpetas separadas para rutas, controladores, middlewares, modelos, repositorios y servicios.
+
+## 23 – Segunda ruta protegida
+
+<img width="680" height="767" alt="23 segunda ruta protegida" src="https://github.com/user-attachments/assets/83ad8934-d96d-404a-8a0f-aa842b29315d" />
+
+
+`GET /api/v1/auth/me`
+
+Acceso correcto a la segunda ruta protegida utilizando un token JWT válido.
+
+## 24 – Segunda ruta protegida sin token
+
+<img width="675" height="691" alt="24 auth me sin token" src="https://github.com/user-attachments/assets/70104b52-9715-4aa8-91d8-09ed59341c49" />
+
+
+`GET /api/v1/auth/me`
+
+Respuesta `401 Unauthorized` al intentar acceder sin token de autenticación.
+
 # Entregables
 
 ## Google Drive
 
-[Parte 2 – Módulo 7.zip](https://github.com/user-attachments/files/31853162/Parte.2.Modulo.7.zip)
+
 [Parte 1 – Módulo 6.zip](https://github.com/user-attachments/files/31853158/Parte.1.Modulo.6.zip)
+
+[Parte 2 – Módulo 7.zip](https://github.com/user-attachments/files/31853162/Parte.2.Modulo.7.zip)
+
+[Parte 3 – Módulo 8.zip](https://github.com/user-attachments/files/31919657/Parte.3.Modulo.8.zip)
+
