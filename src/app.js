@@ -31,7 +31,12 @@ import pedidosV1Router
   from "./routes/pedidos-v1.routes.js";
 import authRouter
   from "./routes/auth.routes.js";
-
+import fileUpload
+  from "express-fileupload";
+import uploadRouter
+  from "./routes/upload.routes.js";
+  import perfilesV1Router
+  from "./routes/perfiles-v1.routes.js";
 
 try {
   await probarSequelize(); 
@@ -65,6 +70,9 @@ app.use(
 );
 app.use(express.static(RUTA_PUBLIC));
 
+app.use(
+  fileUpload()
+);
 app.use("/", indexRouter);
 app.use("/", webRouter);
 app.use("/api/usuarios", usuariosRouter);
@@ -92,6 +100,16 @@ app.use(
 app.use(
   "/api/v1/auth",
   authRouter
+);
+
+app.use(
+  "/api/v1/upload",
+  uploadRouter
+);
+
+app.use(
+  "/api/v1/perfiles",
+  perfilesV1Router
 );
 
 app.use(rutaNoEncontrada);

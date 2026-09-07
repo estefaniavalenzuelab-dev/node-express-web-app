@@ -34,6 +34,7 @@ export async function listarPedidosV1(
   try {
     const pedidos =
       await listarPedidosOrm();
+      console.log(req.auth);
 
     return res
       .status(200)

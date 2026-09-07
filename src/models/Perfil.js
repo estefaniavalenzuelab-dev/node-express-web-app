@@ -53,7 +53,18 @@ Perfil.init(
         true,
       field:
         "fecha_nacimiento"
-    }
+    },
+
+    imagen: {
+  type:
+    DataTypes.STRING(255),
+
+  allowNull:
+    true,
+
+  field:
+    "imagen"
+}
   },
   {
     sequelize,

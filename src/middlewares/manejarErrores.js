@@ -4,6 +4,40 @@ export function manejarErrores(
   res,
   next
 ) {
+  if (
+    error.name ===
+    "UnauthorizedError"
+  ) {
+    let message =
+      "Token inválido o ausente.";
+
+    if (
+      error.code ===
+      "credentials_required"
+    ) {
+      message =
+        "Token de autenticación requerido.";
+    }
+
+    if (
+      error.code ===
+      "invalid_token"
+    ) {
+      message =
+        "Token inválido o expirado.";
+    }
+
+    return res
+      .status(401)
+      .json({
+        status:
+          "error",
+        message,
+        data:
+          null
+      });
+  }
+
   const statusCode =
     error.statusCode ??
     500;
@@ -13,7 +47,9 @@ export function manejarErrores(
       ? "Error interno del servidor."
       : error.message;
 
-  console.error(error);
+  console.error(
+    error
+  );
 
   return res
     .status(statusCode)
@@ -25,7 +61,6 @@ export function manejarErrores(
         null
     });
 }
-
 
 /*
 export function manejarErrores(error, req, res, next) {

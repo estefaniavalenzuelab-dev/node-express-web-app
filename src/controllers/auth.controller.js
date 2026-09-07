@@ -112,3 +112,21 @@ export function decodificarToken(
     next(error);
   }
 }
+
+export function obtenerSesionJwt(
+  req,
+  res
+) {
+  return res
+    .status(200)
+    .json({
+      status:
+        "ok",
+      message:
+        "Token válido.",
+      data: {
+        auth:
+          req.auth
+      }
+    });
+}
