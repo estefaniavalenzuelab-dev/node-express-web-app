@@ -6,12 +6,12 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   line-height: 1.5;
-  background: #eabae1;
+  background: #f4e7f0;
   color: #202020;
 }
 
 a {
-  color: #132d57;
+  color: #704264;
 }
 
 .contenedor {
@@ -20,7 +20,7 @@ a {
 }
 
 .encabezado {
-  background: #a86e6e;
+  background: #80566f;
   color: #ffffff;
 }
 
@@ -112,11 +112,86 @@ button {
 .pie {
   margin-top: 3rem;
   padding-block: 2rem;
-  background: #ec9b9b;
+  background: #dbc1d2;
 }
 
 .codigo-error {
   margin: 0;
   font-size: 4rem;
   font-weight: 700;
+}
+
+/*Página de inicio */
+
+.inicio {
+  padding: 3rem 0 2rem;
+}
+
+.etiqueta {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: #7a3f5c;
+}
+
+.inicio h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+}
+
+.descripcion {
+  max-width: 700px;
+  font-size: 1.15rem;
+  color: #4b4b4b;
+}
+
+.tecnologias,
+.funcionalidades {
+  margin-top: 2rem;
+}
+
+.tecnologias ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.tecnologias li {
+  padding: 0.5rem 0.9rem;
+  background: #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 8%);
+}
+
+.acciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.acciones a {
+  display: block;
+  padding: 1rem;
+  background: #80566f;
+  border-radius: 0.75rem;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+  color: #ffffff;
+  box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 8%);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.acciones a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 12%);
 }

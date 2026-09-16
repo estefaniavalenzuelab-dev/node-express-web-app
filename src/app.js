@@ -171,14 +171,6 @@ process.on("SIGTERM", () => {
   cerrarAplicacion("SIGTERM");
 });
 
-process.on("SIGINT", () => {
-  cerrarAplicacion("SIGINT");
-});
-
-process.on("SIGTERM", () => {
-  cerrarServidor("SIGTERM");
-});
-
 // import "dotenv/config";
 // import express from "express";
 // import { obtenerMensajeInicio } from "./utils/mensajes.js";

@@ -3,11 +3,14 @@ export function mostrarInicio(req, res) {
     titulo: "Node & Express Web App",
     mensaje: "Servidor funcionando correctamente.",
     tecnologias: [
-      "Node.js",
-      "Express",
-      "Handlebars",
-      "File System"
-    ],
+  "Node.js",
+  "Express",
+  "Handlebars",
+  "PostgreSQL",
+  "Sequelize",
+  "API REST",
+  "JWT"
+],
     anioActual: new Date().getFullYear()
   });
 }

@@ -1,11 +1,23 @@
 {{> header}}
+
 <main class="contenedor">
-  <h1>{{titulo}}</h1>
 
-  <p>{{mensaje}}</p>
+  <section class="inicio">
+    <p class="etiqueta">Proyecto Backend</p>
 
-  <section>
-    <h2>Tecnologías</h2>
+    <h1>{{titulo}}</h1>
+
+    <p class="descripcion">
+      Aplicación desarrollada con Node.js y Express para poner en práctica
+      el desarrollo backend, el manejo de bases de datos y la creación de
+      APIs REST.
+    </p>
+
+    <p>{{mensaje}}</p>
+  </section>
+
+  <section class="tecnologias">
+    <h2>Tecnologías utilizadas</h2>
 
     <ul>
       {{#each tecnologias}}
@@ -13,5 +25,18 @@
       {{/each}}
     </ul>
   </section>
+
+  <section class="funcionalidades">
+    <h2>Explorar el proyecto</h2>
+
+    <div class="acciones">
+      <a href="/usuarios">Ver usuarios</a>
+      <a href="/usuarios-nuevo">Crear usuario</a>
+      <a href="/status">Estado del servidor</a>
+      <a href="/api/v1/usuarios">Ver API REST</a>
+    </div>
+  </section>
+
 </main>
+
 {{> footer}}
