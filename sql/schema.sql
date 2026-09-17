@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   nombre VARCHAR(120) NOT NULL,
   correo VARCHAR(180) NOT NULL UNIQUE,
   activo BOOLEAN NOT NULL DEFAULT TRUE,
+  password_hash VARCHAR(255),
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -43,6 +44,8 @@ CREATE TABLE IF NOT EXISTS perfiles (
   direccion VARCHAR(250),
 
   fecha_nacimiento DATE,
+  
+  imagen VARCHAR(255),
 
   created_at TIMESTAMPTZ
     NOT NULL
